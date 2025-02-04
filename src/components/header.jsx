@@ -18,53 +18,41 @@ import {
 } from "@mantine/core";
 import PropTypes from "prop-types";
 import { notifications } from "@mantine/notifications";
-import { setRole, setCurrentAccessibleModules } from "../redux/userslice";
+// import { setRole, setCurrentAccessibleModules } from "../redux/userslice";
 import classes from "../Modules/Dashboard/Dashboard.module.css";
 import avatarImage from "../assets/avatar.png";
-import { logoutRoute, updateRoleRoute } from "../routes/dashboardRoutes";
+import { logoutRoute } from "../routes/dashboardRoutes";
+import { setchoosenRole } from "../redux/userslice";
 
 function Header({ opened, toggleSidebar }) {
   const [popoverOpened, setPopoverOpened] = useState(false);
   const username = useSelector((state) => state.user.username);
-  const roles = useSelector((state) => state.user.roles);
   const role = useSelector((state) => state.user.role);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  console.log("values in the role header is ", role);
 
   const handleRoleChange = async (newRole) => {
-    const token = localStorage.getItem("authToken");
-    try {
-      const response = await axios.patch(
-        updateRoleRoute,
-        {
-          last_selected_role: newRole,
-        },
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        },
-      );
+    notifications.show({
+      title: "Role Updated",
+      message: `Your role has been changed to ${newRole}`,
+      color: "green",
+    });
 
-      notifications.show({
-        title: "Role Updated",
-        message: (
-          <Flex gap="4px">
-            <Text fz="sm">Your role has been changed to </Text>
-            <Text fz="sm" fw="500" c="dark">
-              {newRole}
-            </Text>
-          </Flex>
-        ),
-        color: "green",
-      });
-      console.log(response.data.message);
-      dispatch(setRole(newRole));
-      dispatch(setCurrentAccessibleModules());
-    } catch (error) {
-      console.error("Error updating last selected role:", error.response.data);
+    // Update Redux and localStorage
+    dispatch(setchoosenRole(newRole));
+    localStorage.setItem("selectedRole", newRole);
+
+    // Navigate based on the selected role
+    if (newRole === "faculty") {
+      navigate("/faculty-navbar");
+    } else if (newRole === "student") {
+      navigate("/student-navbar");
+    } else if (newRole === "admin") {
+      navigate("/admin-dashboard");
     }
   };
+
   const handleLogout = async () => {
     const token = localStorage.getItem("authToken");
 
@@ -117,8 +105,8 @@ function Header({ opened, toggleSidebar }) {
             }}
             variant="default"
             rightSection={<UserSwitch size="24px" />}
-            data={roles}
-            value={role}
+            data={[role]}
+            value={[role]}
             onChange={handleRoleChange}
             placeholder="Role"
             mr="64px"

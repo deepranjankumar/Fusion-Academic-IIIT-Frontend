@@ -1,0 +1,38 @@
+/* HeaderTabs.module.css */
+
+.header {
+    background-color: #f1f1f1;
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .mainSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .user {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .userActive {
+    background-color: #f0f0f0;
+  }
+  
+  .tabs {
+    margin-top: 20px;
+  }
+  
+  .tabsList {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .tab {
+    font-weight: bold;
+    color: #333;
+  }
+  

@@ -8,7 +8,6 @@ import Header from "./header";
 export function Layout({ children }) {
   const [opened, { close, open }] = useDisclosure(false);
   const [isCollapsed, setIsCollapsed] = useState(true);
-
   const toggleSidebar = () => {
     if (isCollapsed) {
       open();
@@ -43,7 +42,7 @@ export function Layout({ children }) {
       >
         <SidebarContent
           isCollapsed={isCollapsed}
-          toggleSidebar={toggleSidebar}
+          toggleSidebar={() => setIsCollapsed(!isCollapsed)}
         />
       </AppShell.Navbar>
 

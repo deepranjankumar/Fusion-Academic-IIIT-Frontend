@@ -147,29 +147,9 @@ function Dashboard() {
     fetchDashboardData();
   }, [dispatch]);
 
-  // const handleTabChange = (direction) => {
-  //   const newIndex =
-  //     direction === "next"
-  //       ? Math.min(+activeTab + 1, tabItems.length - 1)
-  //       : Math.max(+activeTab - 1, 0);
-  //   setActiveTab(String(newIndex));
-  //   tabsListRef.current.scrollBy({
-  //     left: direction === "next" ? 50 : -50,
-  //     behavior: "smooth",
-  //   });
-  // };
-
   const notificationsToDisplay =
     activeTab === "1" ? announcementsList : notificationsList;
 
-  // const notification_for_badge_count =
-  //   activeTab === "0" ? announcementsList : notificationsList;
-
-  // const notification_count = notification_for_badge_count.filter(
-  //   (n) => !n.deleted && n.unread,
-  // ).length;
-
-  // sortMap is an object that maps sorting categories to sorting functions.
   const sortedNotifications = useMemo(() => {
     const sortMap = {
       "Most Recent": (a, b) => new Date(b.timestamp) - new Date(a.timestamp),
@@ -268,69 +248,6 @@ function Dashboard() {
     <>
       <CustomBreadcrumbs />
       <Flex justify="space-between" align="center" mt="lg">
-        {/* <Flex
-          justify="flex-start"
-          align="center"
-          gap={{ base: "0.5rem", md: "1rem" }}
-          mt={{ base: "1rem", md: "1.5rem" }}
-          ml={{ md: "lg" }}
-        >
-          <Button
-            onClick={() => handleTabChange("prev")}
-            variant="default"
-            p={0}
-            style={{ border: "none" }}
-          >
-            <CaretCircleLeft
-              className={classes.fusionCaretCircleIcon}
-              weight="light"
-            />
-          </Button>
-
-          <div className={classes.fusionTabsContainer} ref={tabsListRef}>
-            <Tabs value={activeTab} onChange={setActiveTab}>
-              <Tabs.List style={{ display: "flex", flexWrap: "nowrap" }}>
-                {tabItems.map((item, index) => (
-                  <Tabs.Tab
-                    value={`${index}`}
-                    key={index}
-                    className={
-                      activeTab === `${index}`
-                        ? classes.fusionActiveRecentTab
-                        : ""
-                    }
-                  >
-                    <Flex gap="4px">
-                      <Text>{item.title}</Text>
-                      {activeTab !== index.toString() && (
-                        <Badge
-                          color={notification_count === 0 ? "grey" : "blue"}
-                          size="sm"
-                          p={6}
-                        >
-                          {notification_count}
-                        </Badge>
-                      )}
-                    </Flex>
-                  </Tabs.Tab>
-                ))}
-              </Tabs.List>
-            </Tabs>
-          </div>
-
-          <Button
-            onClick={() => handleTabChange("next")}
-            variant="default"
-            p={0}
-            style={{ border: "none" }}
-          >
-            <CaretCircleRight
-              className={classes.fusionCaretCircleIcon}
-              weight="light"
-            />
-          </Button>
-        </Flex> */}
-
         <ModuleTabs
           tabs={tabItems}
           activeTab={activeTab}
