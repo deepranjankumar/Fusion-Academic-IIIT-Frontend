@@ -1,0 +1,37 @@
+.container {
+    width: 100%;
+  }
+  
+  .m_7485cace {
+    --container-size-xs: calc(33.75rem * var(--mantine-scale));
+    --container-size-sm: calc(45rem * var(--mantine-scale));
+    --container-size-md: calc(60rem * var(--mantine-scale));
+    --container-size-lg: calc(71.25rem * var(--mantine-scale));
+    --container-size-xl: calc(82.5rem * var(--mantine-scale));
+    --container-size: var(--container-size-md);
+    max-width: var(--container-size);
+    padding-inline: var(--mantine-spacing-md);
+  }
+  
+  .header {
+    background-color: white;
+    border-bottom: 1px solid #dee2e6;
+    padding: 1rem 0;
+  }
+  
+  .content {
+    padding: 2rem 0;
+    width: 100%;
+  }
+  
+  /* Add tab hover effects */
+  .tab:hover {
+    background-color: #f8f9fa;
+    transition: background-color 0.2s ease;
+  }
+  
+  .tab[data-active] {
+    border-bottom: 2px solid #228be6;
+  }
+
+  

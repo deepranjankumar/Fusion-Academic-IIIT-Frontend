@@ -3,14 +3,17 @@ import { Container, Tabs } from "@mantine/core";
 import { useSelector } from "react-redux";
 import classes from "./DoubleHeader.module.css";
 import SupervisorRequests from "../Thesis/Supervisor_request";
-
+import FacultyResultUpload from '../faculty/ResultUpload'
+import PGPCForm from "../seminar/PGPC";
+import TAAssignmentTest from "../TaAssistanship/TAAssignment";
 const tabs = [
   "Home",
   "RollList",
   "Supervisor",
   "Upload Result",
   "Forums",
-  "Support",
+  "PGPC",
+  "Assign TA",
   "Account",
   "Helpdesk",
 ];
@@ -22,9 +25,7 @@ function Home() {
 function RollList() {
   return <div>Roll List Page Content</div>;
 }
-function UploadResult() {
-  return <div>Upload Result Page Content</div>;
-}
+
 function Forums() {
   return <div>Forums Page Content</div>;
 }
@@ -50,12 +51,14 @@ export function FacultyNavabr() {
   // Map tab names to their corresponding components
   const renderContent = () => {
     switch (selectedTab) {
+      case "PGPC":
+        return <PGPCForm/>;
       case "RollList":
         return <RollList />;
       case "Supervisor":
         return <SupervisorRequests userid={userId} />;
       case "Upload Result":
-        return <UploadResult />;
+        return <FacultyResultUpload/>;
       case "Forums":
         return <Forums />;
       case "Support":
@@ -64,6 +67,8 @@ export function FacultyNavabr() {
         return <Account />;
       case "Helpdesk":
         return <Helpdesk />;
+        case "Assign TA":
+        return < TAAssignmentTest />;
       default:
         return <Home />;
     }
@@ -73,19 +78,33 @@ export function FacultyNavabr() {
     <div className={classes.container}>
       <div className={classes.header}>
         <Container size="md">
-          <Tabs
-            value={selectedTab}
-            onChange={handleTabChange}
-            variant="outline"
-          >
-            <Tabs.List>
-              {tabs.map((tab) => (
-                <Tabs.Tab value={tab} key={tab}>
-                  {tab}
-                </Tabs.Tab>
-              ))}
-            </Tabs.List>
-          </Tabs>
+        <Tabs
+  value={selectedTab}
+  onChange={handleTabChange}
+  styles={{
+    tabLabel: { fontSize: "16px", fontWeight: "500", letterSpacing: "0.5px" }, // Applies to all tabs
+  }}
+>
+  <Tabs.List  >
+    {tabs.map((tab) => (
+      <Tabs.Tab 
+        value={tab} 
+        key={tab}
+        styles={{
+          tabLabel: {
+            fontSize: "18px", // Slightly larger for better readability
+            fontWeight: selectedTab === tab ? "600" : "600", // Bold active tab
+            color: selectedTab === tab ? "#007bff" : "#333", // Highlight active tab
+            transition: "color 0.3s ease", // Smooth transition
+          },
+        }}
+      >
+        {tab}
+      </Tabs.Tab>
+    ))}
+  </Tabs.List>
+</Tabs>
+
         </Container>
       </div>
 

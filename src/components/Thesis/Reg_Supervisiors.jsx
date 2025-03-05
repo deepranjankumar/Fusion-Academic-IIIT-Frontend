@@ -9,173 +9,141 @@ import {
   Paper,
   Notification,
   Loader,
-  InputWrapper,
+  Input,
+  Checkbox,
 } from "@mantine/core";
 
 function SupervisorForm({ faculty = [], onClose }) {
+  const [category, setCategory] = useState("");
+  const [researchArea, setResearchArea] = useState("");
   const [supervisor, setSupervisor] = useState("");
-  const [coSupervisor1, setCoSupervisor1] = useState("");
-  const [coSupervisor2, setCoSupervisor2] = useState("");
+  const [coSupervisor, setCoSupervisor] = useState("");
+  const [externalMentor, setExternalMentor] = useState(false);
+  const [mentorName, setMentorName] = useState("");
+  const [mentorEmail, setMentorEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const id = useSelector((state) => state.user.roll_no);
-
+  const rollNo = useSelector((state) => state.user.roll_no);
   const handleSubmit = async () => {
     setLoading(true);
-
     const payload = {
+      roll_no: rollNo,
+      category,
+      thesis_topic: researchArea,
       supervisor_id: supervisor,
-      co_supervisor_id_1: coSupervisor1,
-      co_supervisor_id_2: coSupervisor2,
-      student_id: id,
+      co_supervisor_id: coSupervisor,
+      external_mentor: externalMentor ? { name: mentorName, email: mentorEmail } : null,
     };
 
     try {
-      await axios.post(
-        "http://localhost:8000/api/submit_supervisors/",
-        payload,
-      );
-      setMessage("Supervisor data has been submitted successfully!");
-
+      await axios.post("http://localhost:8000/api/submit_supervisors/", payload);
+      setMessage("Form submitted successfully!");
       setTimeout(() => {
-        setMessage(""); // Clear message
-        onClose(); // Close the form
+        setMessage("");
+        onClose();
       }, 5000);
     } catch (error) {
       console.error(error);
-      setMessage("Failed to submit the supervisors. Please try again.");
+      setMessage("Failed to submit. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Paper
-      style={{
-        maxWidth: 500,
-        margin: "0 auto",
-        padding: "20px",
-        backgroundColor: "#f9f9f9",
-        borderRadius: "12px",
-        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-      }}
-    >
-      <h2
-        style={{
-          fontSize: "1.8rem",
-          fontWeight: "bold",
-          textAlign: "center",
-          marginBottom: "20px",
-        }}
-      >
-        Choose Supervisor
-      </h2>
+    <Paper style={{ maxWidth: 600, margin: "0 auto", padding: 20, borderRadius: 12 }}>
+      <h2 style={{ textAlign: "center", marginBottom: 20 }}>Supervisor Selection</h2>
+
+      {/* Roll No and Name (Auto-filled) */}
+      <Input label="Roll No" value={rollNo} disabled style={{ marginBottom: 15 }} />
+
+      {/* Category of Registration */}
+      <Select
+        label="Category of Registration"
+        value={category}
+        onChange={setCategory}
+        placeholder="Select Category"
+        data={["Regular", "Sponsored", "External"]}
+        style={{ marginBottom: 15 }}
+      />
+
+      {/* Area of Research */}
+      <Input
+        label="Area of Research"
+        value={researchArea}
+        onChange={(e) => setResearchArea(e.target.value)}
+        placeholder="Enter Research Area"
+        style={{ marginBottom: 15 }}
+      />
 
       {/* Supervisor Selection */}
-      <InputWrapper
-        description="Choose your supervisor"
-        style={{ marginBottom: "15px" }}
-      >
-        <Select
-          value={supervisor}
-          onChange={setSupervisor}
-          placeholder="Select Supervisor"
-          data={faculty
-            .filter((f) => f.id !== coSupervisor1 && f.id !== coSupervisor2)
-            .map((f) => ({ value: f.id, label: f.name }))}
-        />
-      </InputWrapper>
+      <Select
+        label="Supervisor"
+        value={supervisor}
+        onChange={setSupervisor}
+        placeholder="Select Supervisor"
+        data={faculty.filter((f) => f.id !== coSupervisor).map((f) => ({ value: f.id, label: f.name }))}
+        style={{ marginBottom: 15 }}
+      />
 
-      {/* Co-Supervisor 1 Selection */}
-      <InputWrapper
-        description="Choose your first co-supervisor"
-        style={{ marginBottom: "15px" }}
-      >
-        <Select
-          value={coSupervisor1}
-          onChange={setCoSupervisor1}
-          placeholder="Select Co-Supervisor 1"
-          data={faculty
-            .filter((f) => f.id !== supervisor && f.id !== coSupervisor2)
-            .map((f) => ({ value: f.id, label: f.name }))}
-        />
-      </InputWrapper>
+      {/* Co-Supervisor Selection */}
+      <Select
+        label="Co-Supervisor"
+        value={coSupervisor}
+        onChange={setCoSupervisor}
+        placeholder="Select Co-Supervisor"
+        data={faculty.filter((f) => f.id !== supervisor).map((f) => ({ value: f.id, label: f.name }))}
+        style={{ marginBottom: 15 }}
+      />
 
-      {/* Co-Supervisor 2 Selection */}
-      <InputWrapper
-        description="Choose your second co-supervisor"
-        style={{ marginBottom: "15px" }}
-      >
-        <Select
-          value={coSupervisor2}
-          onChange={setCoSupervisor2}
-          placeholder="Select Co-Supervisor 2"
-          data={faculty
-            .filter((f) => f.id !== supervisor && f.id !== coSupervisor1)
-            .map((f) => ({ value: f.id, label: f.name }))}
-        />
-      </InputWrapper>
+      {/* External Mentor Checkbox */}
+      <Checkbox
+        label="Do you have an external mentor?"
+        checked={externalMentor}
+        onChange={(e) => setExternalMentor(e.currentTarget.checked)}
+        style={{ marginBottom: 15 }}
+      />
 
-      {/* Loading Indicator */}
-      {loading && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            background: "rgba(255, 255, 255, 0.8)",
-            zIndex: 1000,
-          }}
-        >
-          <Loader />
-        </div>
+      {/* External Mentor Details (Conditional) */}
+      {externalMentor && (
+        <>
+          <Input
+            label="External Mentor Name"
+            value={mentorName}
+            onChange={(e) => setMentorName(e.target.value)}
+            placeholder="Enter Mentor Name"
+            style={{ marginBottom: 15 }}
+          />
+          <Input
+            label="External Mentor Email"
+            value={mentorEmail}
+            onChange={(e) => setMentorEmail(e.target.value)}
+            placeholder="Enter Mentor Email"
+            style={{ marginBottom: 15 }}
+          />
+        </>
       )}
 
       {/* Submission Message */}
       {message && (
-        <Notification
-          style={{ marginTop: "20px" }}
-          color={message.includes("successfully") ? "green" : "red"}
-        >
+        <Notification color={message.includes("successfully") ? "green" : "red"} style={{ marginTop: 20 }}>
           {message}
         </Notification>
       )}
 
       {/* Submit and Cancel Buttons */}
-      <Group position="apart" style={{ marginTop: "30px" }}>
-        <Button
-          onClick={handleSubmit}
-          loading={loading}
-          style={{
-            backgroundColor: "#007bff",
-            color: "#fff",
-            padding: "12px 24px",
-            fontSize: "16px",
-            borderRadius: "8px",
-          }}
-        >
-          Submit
-        </Button>
-        <Button
-          onClick={onClose}
-          variant="outline"
-          style={{
-            padding: "12px 24px",
-            fontSize: "16px",
-            borderRadius: "8px",
-            color: "#333",
-            borderColor: "#ccc",
-          }}
-        >
-          Cancel
-        </Button>
+      <Group position="apart" style={{ marginTop: 30 }}>
+        <Button onClick={handleSubmit} loading={loading} color="blue">Submit</Button>
+        <Button onClick={onClose} variant="outline">Cancel</Button>
       </Group>
+
+      {/* Loading Indicator */}
+      {loading && (
+        <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, display: "flex", justifyContent: "center", alignItems: "center", background: "rgba(255, 255, 255, 0.8)", zIndex: 1000 }}>
+          <Loader />
+        </div>
+      )}
     </Paper>
   );
 }
@@ -185,7 +153,7 @@ SupervisorForm.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-    }),
+    })
   ).isRequired,
   onClose: PropTypes.func.isRequired,
 };

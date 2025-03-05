@@ -14,7 +14,7 @@ import ReqSupervisior from "./components/Thesis/Req_supervisor";
 // import ValidateAuth from "./helper/validateauth";
 import InactivityHandler from "./helper/inactivityhandler";
 import { FacultyNavabr } from "./components/Navbar/faculty";
-import { StudentNavabr } from "./components/Navbar/Student";
+import { StudentNavbar } from "./components/Navbar/Student";
 
 export default function App() {
   const role =
@@ -53,7 +53,7 @@ export default function App() {
             path="/student-navbar"
             element={
               <Layout>
-                <StudentNavabr />
+                <StudentNavbar />
               </Layout>
             }
           />

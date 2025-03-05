@@ -1,38 +1,32 @@
-/* HeaderTabs.module.css */
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
 
 .header {
-    background-color: #f1f1f1;
-    padding: 20px;
-    border-bottom: 1px solid #e0e0e0;
-  }
-  
-  .mainSection {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .user {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-  }
-  
-  .userActive {
-    background-color: #f0f0f0;
-  }
-  
-  .tabs {
-    margin-top: 20px;
-  }
-  
-  .tabsList {
-    display: flex;
-    gap: 20px;
-  }
-  
-  .tab {
-    font-weight: bold;
-    color: #333;
-  }
-  
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: flex-start;  /* Aligns tabs to the left */
+}
+
+.content {
+  display: flex;
+  justify-content: flex-start;  /* Ensures content is left-aligned */
+  flex-direction: column;
+}
+.m_7485cace {
+  --container-size-xs: calc(33.75rem* var(--mantine-scale));
+  --container-size-sm: calc(45rem* var(--mantine-scale));
+  --container-size-md: calc(60rem* var(--mantine-scale));
+  --container-size-lg: calc(71.25rem* var(--mantine-scale));
+  --container-size-xl: calc(82.5rem* var(--mantine-scale));
+  --container-size: var(--container-size-md);
+  max-width: var(--container-size);
+  padding-inline: var(--mantine-spacing-md);
+  /* margin-inline: auto; */
+}
+
+
+
+
